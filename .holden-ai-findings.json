@@ -1,29 +1,31 @@
 {
-  "scan_date": "2026-11-18T00:00:00Z",
-  "scan_path": ".",
   "category": "all",
   "findings": [
     {
-      "id": "HOLDEN_AI_001",
-      "status": "fixed",
-      "first_seen": "2026-11-18",
-      "last_seen": "2026-11-18",
-      "unresolved_since": null,
-      "suppression_reason": null,
-      "principle": "reliability",
-      "severity": "LOW",
       "confidence": "high",
-      "title": "var.subnetworks accepts NAT range combinations the Cloud NAT API rejects at apply",
-      "file": "variables.tf",
-      "line": 76,
-      "resource": "variable.subnetworks",
-      "related_resources": ["google_compute_router_nat.main"],
       "explanation": "The validations covered allowed values and 'LIST_OF_SECONDARY_IP_RANGES needs secondary_ip_range_names', but not the converse rules the API enforces: secondary_ip_range_names may only be set when LIST_OF_SECONDARY_IP_RANGES is listed, ALL_IP_RANGES must be the only value, and the list must not be empty. Each of those plans cleanly and fails on the NAT create/update. Principle is a best fit: this is an apply-time correctness bug.",
-      "remediation": "Add validations for the converse secondary-range rule, ALL_IP_RANGES exclusivity and a non-empty source_ip_ranges_to_nat.",
+      "file": "variables.tf",
+      "first_seen": "2026-11-18",
+      "fix": "validation {\n  condition = alltrue([for s in var.subnetworks :\n    contains(s.source_ip_ranges_to_nat, \"LIST_OF_SECONDARY_IP_RANGES\") || length(coalesce(s.secondary_ip_range_names, [])) == 0\n  ])\n  error_message = \"...\"\n}\n\nvalidation {\n  condition = alltrue([for s in var.subnetworks :\n    length(s.source_ip_ranges_to_nat) > 0 && (!contains(s.source_ip_ranges_to_nat, \"ALL_IP_RANGES\") || length(s.source_ip_ranges_to_nat) == 1)\n  ])\n  error_message = \"...\"\n}",
       "fixable": true,
-      "fix": "validation {\n  condition = alltrue([for s in var.subnetworks :\n    contains(s.source_ip_ranges_to_nat, \"LIST_OF_SECONDARY_IP_RANGES\") || length(coalesce(s.secondary_ip_range_names, [])) == 0\n  ])\n  error_message = \"...\"\n}\n\nvalidation {\n  condition = alltrue([for s in var.subnetworks :\n    length(s.source_ip_ranges_to_nat) > 0 && (!contains(s.source_ip_ranges_to_nat, \"ALL_IP_RANGES\") || length(s.source_ip_ranges_to_nat) == 1)\n  ])\n  error_message = \"...\"\n}"
+      "id": "HOLDEN_AI_001",
+      "last_seen": "2026-11-18",
+      "line": 76,
+      "principle": "reliability",
+      "related_resources": [
+        "google_compute_router_nat.main"
+      ],
+      "remediation": "Add validations for the converse secondary-range rule, ALL_IP_RANGES exclusivity and a non-empty source_ip_ranges_to_nat.",
+      "resource": "variable.subnetworks",
+      "severity": "LOW",
+      "status": "fixed",
+      "suppression_reason": null,
+      "title": "var.subnetworks accepts NAT range combinations the Cloud NAT API rejects at apply",
+      "unresolved_since": null
     }
   ],
+  "scan_date": "2026-11-18T00:00:00Z",
+  "scan_path": ".",
   "suggested_policies": [],
   "suggested_suppressions": []
 }
