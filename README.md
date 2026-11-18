@@ -58,18 +58,18 @@ No modules.
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_description"></a> [description](#input\_description) | Human-readable description of the Cloud Router | `string` | `"Cloud Router for Cloud NAT egress"` | no |
-| <a name="input_idle_timeouts"></a> [idle\_timeouts](#input\_idle\_timeouts) | NAT connection idle timeouts in seconds, set explicitly rather than relying on provider defaults | `object({ udp = optional(number, 30) icmp = optional(number, 30) tcp_established = optional(number, 1200) tcp_transitory = optional(number, 30) tcp_time_wait = optional(number, 120) })` | `{}` | no |
+| <a name="input_idle_timeouts"></a> [idle\_timeouts](#input\_idle\_timeouts) | NAT connection idle timeouts in seconds, set explicitly rather than relying on provider defaults | <pre>object({<br/>    udp             = optional(number, 30)<br/>    icmp            = optional(number, 30)<br/>    tcp_established = optional(number, 1200)<br/>    tcp_transitory  = optional(number, 30)<br/>    tcp_time_wait   = optional(number, 120)<br/>  })</pre> | `{}` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | Labels to apply to the static NAT addresses, for cost allocation and ownership tracking | `map(string)` | `{}` | no |
 | <a name="input_log_filter"></a> [log\_filter](#input\_log\_filter) | Which NAT events are logged: ERRORS\_ONLY, TRANSLATIONS\_ONLY or ALL. Logging itself is always enabled | `string` | `"ERRORS_ONLY"` | no |
 | <a name="input_min_ports_per_vm"></a> [min\_ports\_per\_vm](#input\_min\_ports\_per\_vm) | Minimum number of NAT ports allocated to each VM | `number` | `64` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the Cloud Router; also used as the prefix for the NAT and its static addresses | `string` | n/a | yes |
 | <a name="input_nat_ip_allocate_option"></a> [nat\_ip\_allocate\_option](#input\_nat\_ip\_allocate\_option) | How NAT egress IPs are allocated: MANUAL\_ONLY (static google\_compute\_address resources created by this module, allowlistable) or AUTO\_ONLY (Google-allocated, ephemeral) | `string` | `"MANUAL_ONLY"` | no |
-| <a name="input_nat_ip_suffixes"></a> [nat\_ip\_suffixes](#input\_nat\_ip\_suffixes) | Suffixes of the static external addresses to reserve when nat\_ip\_allocate\_option is MANUAL\_ONLY; one address named <name>-nat-<suffix> per entry | `set(string)` | `["a"]` | no |
-| <a name="input_nat_name"></a> [nat\_name](#input\_nat\_name) | Name of the Cloud NAT gateway; defaults to <name>-nat | `string` | `null` | no |
+| <a name="input_nat_ip_suffixes"></a> [nat\_ip\_suffixes](#input\_nat\_ip\_suffixes) | Suffixes of the static external addresses to reserve when nat\_ip\_allocate\_option is MANUAL\_ONLY; one address named {name}-nat-{suffix} per entry | `set(string)` | <pre>[<br/>  "a"<br/>]</pre> | no |
+| <a name="input_nat_name"></a> [nat\_name](#input\_nat\_name) | Name of the Cloud NAT gateway; defaults to {name}-nat | `string` | `null` | no |
 | <a name="input_network"></a> [network](#input\_network) | Self link or ID of the VPC network the router is attached to | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | Region to deploy the Cloud Router and NAT in | `string` | `"europe-west2"` | no |
-| <a name="input_subnetworks"></a> [subnetworks](#input\_subnetworks) | Subnetworks (self link or name) to NAT, with the ranges of each to translate. NAT is scoped to exactly this list | `list(object({ name = string source_ip_ranges_to_nat = optional(list(string), ["ALL_IP_RANGES"]) secondary_ip_range_names = optional(list(string)) }))` | n/a | yes |
-| <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | Terraform operation timeouts applied to the router, NAT and addresses | `object({ create = optional(string, "20m") update = optional(string, "20m") delete = optional(string, "20m") })` | `{}` | no |
+| <a name="input_subnetworks"></a> [subnetworks](#input\_subnetworks) | Subnetworks (self link or name) to NAT, with the ranges of each to translate. NAT is scoped to exactly this list | <pre>list(object({<br/>    name                     = string<br/>    source_ip_ranges_to_nat  = optional(list(string), ["ALL_IP_RANGES"])<br/>    secondary_ip_range_names = optional(list(string))<br/>  }))</pre> | n/a | yes |
+| <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | Terraform operation timeouts applied to the router, NAT and addresses | <pre>object({<br/>    create = optional(string, "20m")<br/>    update = optional(string, "20m")<br/>    delete = optional(string, "20m")<br/>  })</pre> | `{}` | no |
 
 ## Outputs
 

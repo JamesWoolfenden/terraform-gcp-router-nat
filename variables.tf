@@ -10,7 +10,7 @@ variable "name" {
 
 variable "nat_name" {
   type        = string
-  description = "Name of the Cloud NAT gateway; defaults to <name>-nat"
+  description = "Name of the Cloud NAT gateway; defaults to {name}-nat"
   default     = null
 
   validation {
@@ -64,7 +64,7 @@ variable "nat_ip_allocate_option" {
 
 variable "nat_ip_suffixes" {
   type        = set(string)
-  description = "Suffixes of the static external addresses to reserve when nat_ip_allocate_option is MANUAL_ONLY; one address named <name>-nat-<suffix> per entry"
+  description = "Suffixes of the static external addresses to reserve when nat_ip_allocate_option is MANUAL_ONLY; one address named {name}-nat-{suffix} per entry"
   default     = ["a"]
 
   validation {
