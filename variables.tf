@@ -99,6 +99,20 @@ variable "subnetworks" {
     ])
     error_message = "var.subnetworks entries using LIST_OF_SECONDARY_IP_RANGES must set secondary_ip_range_names"
   }
+
+  validation {
+    condition = alltrue([for s in var.subnetworks :
+      contains(s.source_ip_ranges_to_nat, "LIST_OF_SECONDARY_IP_RANGES") || length(coalesce(s.secondary_ip_range_names, [])) == 0
+    ])
+    error_message = "var.subnetworks[*].secondary_ip_range_names can only be set when source_ip_ranges_to_nat includes LIST_OF_SECONDARY_IP_RANGES"
+  }
+
+  validation {
+    condition = alltrue([for s in var.subnetworks :
+      length(s.source_ip_ranges_to_nat) > 0 && (!contains(s.source_ip_ranges_to_nat, "ALL_IP_RANGES") || length(s.source_ip_ranges_to_nat) == 1)
+    ])
+    error_message = "var.subnetworks[*].source_ip_ranges_to_nat must not be empty, and ALL_IP_RANGES cannot be combined with other values"
+  }
 }
 
 variable "log_filter" {
